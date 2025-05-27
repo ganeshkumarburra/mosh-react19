@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaList } from "react-icons/fa";
+import styled from "styled-components";
 
 interface ListGroupProps {
   items: string[];
@@ -7,25 +7,29 @@ interface ListGroupProps {
   onSelectItem: (item: string) => void;
 }
 
+const List = styled.ul`
+  list-style-type: none;
+`;
+
+interface ListItemProps {
+  active: boolean;
+}
+const ListItem = styled.li<ListItemProps>`
+  background-color: ${(props) => (props.active ? "green" : "none")};
+`;
+
 function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   return (
     <>
-      <h2>
-        <span>
-          <FaList size={24} style={{ margin: "0px 5px 0px 5px" }} />
-        </span>
-        {heading}
-      </h2>
-      <ul className="list-group">
+      <h1>{heading}</h1>
+      <List className="list-group">
         {items.length === 0 ? (
           <p>No items found</p>
         ) : (
           items.map((item, index) => (
-            <li
-              className={`list-group-item ${
-                index == selectedIndex ? "active" : ""
-              }`}
+            <ListItem
+              active={index === selectedIndex}
               key={item}
               onClick={() => {
                 setSelectedIndex(index);
@@ -33,10 +37,10 @@ function ListGroup({ items, heading, onSelectItem }: ListGroupProps) {
               }}
             >
               {item}
-            </li>
+            </ListItem>
           ))
         )}
-      </ul>
+      </List>
     </>
   );
 }
